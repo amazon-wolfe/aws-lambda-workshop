@@ -16,7 +16,7 @@ build/bin/ffmpeg:
 build/layer.zip: build/bin/ffmpeg
 	cd build && zip -r layer.zip bin
 
-build/output.yml: build/layer.zip cloudformation/template.yml
+build/output.yml: build/layer.zip
 
 deploy: build/output.yml
 	aws s3 cp build/layer.zip s3://$(DEPLOYMENT_BUCKET_NAME)/$(DEPLOYMENT_KEY)
