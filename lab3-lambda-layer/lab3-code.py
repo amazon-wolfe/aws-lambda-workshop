@@ -13,7 +13,7 @@ def lambda_handler(event, context):
     filename, file_extension = os.path.splitext(key)
 
     # Temporary/Emphemoral Storage
-    bucket_name_thumbnail = 'wolfeste-hd-lambda-thumbnail'
+    bucket_name_thumbnail = 'ENTER_THUMBNAIL_BUCKET_NAME'
     temp_vid_file = '/tmp/' + key
     thumbnail_key = filename + '.png'
     temp_thumbnail_file = '/tmp/' + thumbnail_key
