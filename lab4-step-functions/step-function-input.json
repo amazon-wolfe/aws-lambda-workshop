@@ -1,6 +1,6 @@
 {
     "jobName": "awshd-test-job",
-    "jobDefinition": "arn:aws:batch:us-east-1:872893530912:job-definition/SampleJobDefinition-0cf26934673e113:1",
-    "jobQueue": "arn:aws:batch:us-east-1:872893530912:job-queue/SampleJobQueue-9ab88e412ccc6ed",
+    "jobDefinition": "arn:aws:batch:us-east-1:872893530912:job-definition/SampleJobDefinition-3723ea2cfea28d1:1",
+    "jobQueue": "arn:aws:batch:us-east-1:872893530912:job-queue/SampleJobQueue-4307643a2ccc1a8",
     "wait_time": 60
 }

@@ -3,56 +3,56 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: |
   Creates prereqs for lab 3
 Resources:
-  # # VideoS3Bucket:
-  #   Type: AWS::S3::Bucket
-  #   Properties:
-  #     AccessControl: Private
-  #     BucketEncryption:
-  #       ServerSideEncryptionConfiguration:
-  #         - ServerSideEncryptionByDefault:
-  #             SSEAlgorithm: AES256
-  #     PublicAccessBlockConfiguration:
-  #       BlockPublicAcls: true
-  #       BlockPublicPolicy: true
-  #       IgnorePublicAcls: true
-  #       RestrictPublicBuckets: true 
-  #     BucketName: !Join
-  #       - "-"
-  #       - - "awshd-lab3-video-thumb"
-  #         - !Select
-  #           - 0
-  #           - !Split
-  #             - "-"
-  #             - !Select
-  #               - 2
-  #               - !Split
-  #                 - "/"
-  #                 - !Ref "AWS::StackId"
-  # # VideoS3Bucket:
-  #   Type: AWS::S3::Bucket
-  #   Properties:
-  #     AccessControl: Private
-  #     BucketEncryption:
-  #       ServerSideEncryptionConfiguration:
-  #         - ServerSideEncryptionByDefault:
-  #             SSEAlgorithm: AES256
-  #     PublicAccessBlockConfiguration:
-  #       BlockPublicAcls: true
-  #       BlockPublicPolicy: true
-  #       IgnorePublicAcls: true
-  #       RestrictPublicBuckets: true 
-  #     BucketName: !Join
-  #       - "-"
-  #       - - "awshd-lab3-video-thumb"
-  #         - !Select
-  #           - 0
-  #           - !Split
-  #             - "-"
-  #             - !Select
-  #               - 2
-  #               - !Split
-  #                 - "/"
-  #                 - !Ref "AWS::StackId"
+  VideoS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true 
+      BucketName: !Join
+        - "-"
+        - - "awshd-lab3-video"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+  ThumbS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true 
+      BucketName: !Join
+        - "-"
+        - - "awshd-lab3-thumb"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
   Cloud9Instance:
     Type: AWS::Cloud9::EnvironmentEC2
     Properties: 

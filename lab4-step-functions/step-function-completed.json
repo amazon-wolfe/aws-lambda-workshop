@@ -1,0 +1,51 @@
+{
+    "Comment": "AWS HD - Lambda Workshop Lab 4",
+    "StartAt": "Submit Job",
+    "States": {
+                  "Submit Job": {
+                    "Type": "Task",
+                    "Resource": "ENTER_LAMBDA_TRIGGER_ARN",
+                    "ResultPath": "$.guid",
+                    "Next": "Wait X Seconds"
+                  },
+                  "Wait X Seconds": {
+                    "Type": "Wait",
+                    "SecondsPath": "$.wait_time",
+                    "Next": "Get Job Status"
+                  },
+                  "Get Job Status": {
+                    "Type": "Task",
+                    "Resource": "ENTER_LAMBDA_CHECK_STATUS_ARN",
+                    "Next": "Job Complete?",
+                    "InputPath": "$.guid",
+                    "ResultPath": "$.status"
+                  },
+                  "Job Complete?": {
+                    "Type": "Choice",
+                    "Choices": [
+                      {
+                        "Variable": "$.status",
+                        "StringEquals": "FAILED",
+                        "Next": "Job Failed"
+                      },
+                      {
+                        "Variable": "$.status",
+                        "StringEquals": "SUCCEEDED",
+                        "Next": "Get Final Job Status"
+                      }
+                    ],
+                    "Default": "Wait X Seconds"
+                  },
+                  "Job Failed": {
+                    "Type": "Fail",
+                    "Cause": "AWS Batch Job Failed",
+                    "Error": "DescribeJob returned FAILED"
+                  },
+                  "Get Final Job Status": {
+                    "Type": "Task",
+                    "Resource": "ENTER_LAMBDA_CHECK_STATUS_ARN",
+                    "InputPath": "$.guid",
+                    "End": true
+                  }
+    }
+  }

@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: AWS Step Functions sample project for running an AWS Batch job and monitoring until it completes
+Description: Lab4 - Sample Step Functions Lab.  Trigger batch job and query status until completion.
 Resources:
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -70,7 +70,7 @@ Resources:
                   message = 'Error submitting Batch Job'
                   print(message)
                   raise Exception(message)
-      Runtime: "python2.7"
+      Runtime: "python3.7"
       Timeout: "25"
 
   CheckJobFunction:
@@ -108,7 +108,7 @@ Resources:
                   message = 'Error getting Batch Job status'
                   print(message)
                   raise Exception(message)
-      Runtime: "python2.7"
+      Runtime: "python3.7"
       Timeout: "25"
 
   SampleVPC:
@@ -272,66 +272,6 @@ Resources:
                   - "lambda:InvokeFunction"
                 Resource: "*"
 
-  JobStatusPollerStateMachine:
-    Type: "AWS::StepFunctions::StateMachine"
-    Properties:
-      DefinitionString:
-        !Sub
-          - |-
-            {
-              "Comment": "An example of the Amazon States Language that runs an AWS Batch job and monitors the job until it completes.",
-              "StartAt": "Submit Job",
-              "States": {
-                "Submit Job": {
-                  "Type": "Task",
-                  "Resource": "${submitJobArn}",
-                  "ResultPath": "$.guid",
-                  "Next": "Wait X Seconds"
-                },
-                "Wait X Seconds": {
-                  "Type": "Wait",
-                  "SecondsPath": "$.wait_time",
-                  "Next": "Get Job Status"
-                },
-                "Get Job Status": {
-                  "Type": "Task",
-                  "Resource": "${checkJobArn}",
-                  "Next": "Job Complete?",
-                  "InputPath": "$.guid",
-                  "ResultPath": "$.status"
-                },
-                "Job Complete?": {
-                  "Type": "Choice",
-                  "Choices": [
-                    {
-                      "Variable": "$.status",
-                      "StringEquals": "FAILED",
-                      "Next": "Job Failed"
-                    },
-                    {
-                      "Variable": "$.status",
-                      "StringEquals": "SUCCEEDED",
-                      "Next": "Get Final Job Status"
-                    }
-                  ],
-                  "Default": "Wait X Seconds"
-                },
-                "Job Failed": {
-                  "Type": "Fail",
-                  "Cause": "AWS Batch Job Failed",
-                  "Error": "DescribeJob returned FAILED"
-                },
-                "Get Final Job Status": {
-                  "Type": "Task",
-                  "Resource": "${checkJobArn}",
-                  "InputPath": "$.guid",
-                  "End": true
-                }
-              }
-            }
-          - {submitJobArn: !GetAtt [ SubmitJobFunction, Arn ], checkJobArn: !GetAtt [ CheckJobFunction, Arn ]}
-      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
-
 Outputs:
   SampleComputeEnvironmentArn:
     Value:
@@ -342,9 +282,6 @@ Outputs:
   SampleJobDefinition:
     Value:
       Ref: SampleJobDefinition
-  StateMachineArn:
-    Value:
-      Ref: JobStatusPollerStateMachine
   ExecutionInput:
     Description: Sample input to StartExecution.
     Value:
@@ -357,6 +294,3 @@ Outputs:
             "wait_time": 60
           }
         - {jobDefinition: !Ref SampleJobDefinition, jobQueue: !Ref SampleJobQueue }
-Feedback
-English (US)
-Terms of UsePrivacy Policy© 2008 - 2020, Amazon Web Services, Inc. or its affiliates. All rights re
